@@ -20,8 +20,8 @@
 project = 'version'
 copyright = "2022, Michael Fabian Dirks"
 author = "Michael Fabian 'Xaymar' Dirks"
-version = "0.1"
-release = "0.1"
+version = "1.0"
+release = "1.0"
 
 
 # -- General configuration ---------------------------------------------------
