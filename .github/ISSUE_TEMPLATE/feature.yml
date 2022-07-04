@@ -1,0 +1,21 @@
+---
+name: "Suggest an Enhancment to a Feature or a new Feature"
+title: "Replace Me Or Have Your Request Closed"
+description: "Is there something lacking that you would like to have supported?"
+labels: ["enhancement", "help wanted"]
+body:
+- type: textarea
+  attributes:
+    label: "Explain the Feature/Enhancement"
+    description: "Describe the feature or enhancement in as much detail as possible, leave nothing out. If you think images or example videos help describe the Feature/Enhancement, include them."
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: "Examples"
+    description: "Provide some examples of how this feature would/should be used."
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: "Any additional information we need to know?"
