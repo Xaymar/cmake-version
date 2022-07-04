@@ -2,11 +2,13 @@ name: Automated Testing
 
 on:
   push:
-    branches-ignore:
-      - 'documentation'
+    branches:
+      - '*'
+      - '!documentation'
     paths:
-      - 'version.cmake'
+      - '.github/workflows/test.yml'
       - 'tests/**'
+      - 'version.cmake'
 
 jobs:
   test:
