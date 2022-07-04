@@ -9,6 +9,11 @@ on:
       - '.github/workflows/test.yml'
       - 'tests/**'
       - 'version.cmake'
+  pull_request:
+    paths:
+      - '.github/workflows/test.yml'
+      - 'tests/**'
+      - 'version.cmake'
 
 jobs:
   test:
