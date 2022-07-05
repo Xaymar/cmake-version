@@ -94,7 +94,6 @@ function(version)
 	set(OUT_VAR "${ARGV1}")
 
 	# Force clean parent elements.
-	set(${OUT_VAR} "" PARENT_SCOPE)
 	set(${OUT_VAR}_ERROR "" PARENT_SCOPE)
 
 	string(TOUPPER "${ARGV0}" ARGV0)
