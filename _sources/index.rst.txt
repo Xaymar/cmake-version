@@ -8,9 +8,9 @@ Synopsis
 
 .. parsed-literal::
 
-  version(`PARSE`_ <out-var> <string>)
+  version(`PARSE`_ <out-var> [REQUIRE [PATCH|TWEAK][;...]] <string>)
   version(`GENERATE`_ <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
-  version(`MODIFY`_ <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
+  version(`MODIFY`_ <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
   version(`COMPARE`_ <out-var> <a> <b>)
 
 
@@ -27,9 +27,9 @@ Parsing
 
 .. code-block:: cmake
 
-  version(PARSE <out-var> <string>)
+  version(PARSE <out-var> [REQUIRE [PATCH|TWEAK][;...]] <string>)
 
-Attempts to parse the version in ``<string>`` and stores the individual compoents into ``<out-var>_<component>``. If a component is not present in the given version, it will be set to a false constant. If an error occurred, ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be turned into a list if they are encountered.
+Attempts to parse the version in ``<string>`` and stores the individual compoents into ``<out-var>_<component>``. If a component is not present in the given version, it will be set to a false constant. If an error occurred, ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be turned into a list if they are encountered. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
 
 Generating
 ^^^^^^^^^^
@@ -49,9 +49,9 @@ Modifying
 
 .. code-block:: cmake
 
-  version(MODIFY <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
+  version(MODIFY <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
 
-Modifies the version provided in ``<string>`` with the components provided. The components ``<major>``, ``<minor>``, ``<patch>`` and ``<tweak>`` may have a prefix of ``+`` or ``-`` to add and subtract the value, or no prefix to replace. The result of this operation will be stored as a string in ``<out-var>``. If a component did not exist in the original, it will be added to the version as a replace operation. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant.
+Modifies the version provided in ``<string>`` with the components provided. The components ``<major>``, ``<minor>``, ``<patch>`` and ``<tweak>`` may have a prefix of ``+`` or ``-`` to add and subtract the value, or no prefix to replace. The result of this operation will be stored as a string in ``<out-var>``. If a component did not exist in the original, it will be added to the version as a replace operation. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
 
 Comparing
 ^^^^^^^^^
