@@ -98,12 +98,19 @@ function(version)
 
 	string(TOUPPER "${ARGV0}" ARGV0)
 	if(ARGV0 STREQUAL "PARSE")
+		cmake_parse_arguments(
+			PARSE_ARGV 2
+			_992ae727
+			""
+			""
+			"REQUIRE"
+		)
 		# <major> "." <minor> ["." <patch> ["." <tweak>]]
 		# <major> "." <minor> ["." <patch> ["." <tweak>]] [["-"] <pre-release>] ["+" <build>]
 
 		# One regex to rule them all...
-		if(NOT (ARGV2 MATCHES [[^([0-9]+)\.([0-9]+)(\.[0-9]+|)(\.[0-9]+|)(-?[a-zA-Z0-9]+[a-zA-Z0-9\.\-]*|)(\+[a-zA-Z0-9]+[a-zA-Z0-9\.\-]*|)$]]))
-			set(${OUT_VAR}_ERROR "Version format not supported: '${ARGV2}'" PARENT_SCOPE)
+		if(NOT (_992ae727_UNPARSED_ARGUMENTS MATCHES [[^([0-9]+)\.([0-9]+)(\.[0-9]+|)(\.[0-9]+|)(-?[a-zA-Z0-9]+[a-zA-Z0-9\.\-]*|)(\+[a-zA-Z0-9]+[a-zA-Z0-9\.\-]*|)$]]))
+			set(${OUT_VAR}_ERROR "Version format not supported: '${_992ae727_UNPARSED_ARGUMENTS}'" PARENT_SCOPE)
 			return()
 		endif()
 
@@ -116,14 +123,22 @@ function(version)
 			string(SUBSTRING "${CMAKE_MATCH_3}" 1 -1 _TMP)
 			set(${OUT_VAR}_PATCH "${_TMP}" PARENT_SCOPE)
 		else()
-			set(${OUT_VAR}_PATCH "" PARENT_SCOPE)
+			if("PATCH" IN_LIST _992ae727_REQUIRE)
+				set(${OUT_VAR}_PATCH "0" PARENT_SCOPE)
+			else()
+				set(${OUT_VAR}_PATCH "" PARENT_SCOPE)
+			endif()
 		endif()
 		# {4} = Tweak
 		if((DEFINED CMAKE_MATCH_4) AND (NOT "${CMAKE_MATCH_4}" STREQUAL ""))
 			string(SUBSTRING "${CMAKE_MATCH_4}" 1 -1 _TMP)
 			set(${OUT_VAR}_TWEAK "${_TMP}" PARENT_SCOPE)
 		else()
-			set(${OUT_VAR}_TWEAK "" PARENT_SCOPE)
+			if("TWEAK" IN_LIST _992ae727_REQUIRE)
+				set(${OUT_VAR}_TWEAK "0" PARENT_SCOPE)
+			else()
+				set(${OUT_VAR}_TWEAK "" PARENT_SCOPE)
+			endif()
 		endif()
 		# {5} = PreRelease
 		if((DEFINED CMAKE_MATCH_5) AND (NOT "${CMAKE_MATCH_5}" STREQUAL ""))
@@ -270,7 +285,7 @@ function(version)
 			_fe7bcddd
 			"COMPRESS"
 			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
-			""
+			"REQUIRE"
 		)
 
 		# Helpers
@@ -297,7 +312,7 @@ function(version)
 		set(_df8abcce_PRERELEASE "")
 		set(_df8abcce_BUILD "")
 		set(_df8abcce_ERROR "")
-		version(PARSE _df8abcce "${ARGV2}")
+		version(PARSE _df8abcce "${ARGV2}" REQUIRE "${_df8abcce_REQUIRE}")
 		if(_df8abcce_ERROR)
 			set(${OUT_VAR}_ERROR ${_df8abcce_ERROR} PARENT_SCOPE)
 			return()
