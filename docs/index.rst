@@ -9,7 +9,7 @@ Synopsis
 .. parsed-literal::
 
   version(`PARSE`_ <out-var> [REQUIRE [PATCH|TWEAK][;...]] <string>)
-  version(`GENERATE`_ <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
+  version(`GENERATE`_ <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
   version(`MODIFY`_ <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
   version(`COMPARE`_ <out-var> <a> <b>)
 
@@ -38,9 +38,9 @@ Generating
 
 .. code-block:: cmake
 
-  version(GENERATE <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
+  version(GENERATE <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
 
-Generates a version from the components provided and stores the result in ``<out-var>``. The components ``<major>`` and ``<minor>`` will default to ``0`` if not provided. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be converted from a list if encountered.
+Generates a version from the components provided and stores the result in ``<out-var>``. The components ``<major>`` and ``<minor>`` will default to ``0`` if not provided. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be converted from a list if encountered. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
 
 Modifying
 ^^^^^^^^^
@@ -59,7 +59,7 @@ Comparing
 .. _COMPARE:
 
 .. code-block:: cmake
-  
+
   version(COMPARE <out-var> <a> <b>)
 
 Compares the version ``<a>`` against ``<b>`` and stores the result in ``<out-var>``. The provided version will be evaluated in the order MAJOR, MINOR, PATCH, TWEAK, PRERELEASE, and then BUILD. The following results should be expected:
@@ -69,7 +69,7 @@ Compares the version ``<a>`` against ``<b>`` and stores the result in ``<out-var
 - If a component is numerical and the value is larger in ``<a>``, ``<out-var>`` will contain the componenent name prefixed by ``>``.
 - If a component is numerical and the value is larger in ``<b>``, ``<out-var>`` will contain the componenent name prefixed by ``<``.
 - If a component is alphanumerical and the value is different in either, ``<out-var>`` will contain the component name with no prefix.
-- If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant, and ``<out-var>`` will be a false constant. 
+- If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant, and ``<out-var>`` will be a false constant.
 - In all other cases, ``<out-var>`` will be a false constant.
 
 There is no special handling for dot-separated ``PRERELEASE`` and ``BUILD`` component. They will be treated as if they were a string, as special handling for these is up to the application.

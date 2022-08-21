@@ -10,86 +10,8 @@
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#[=======================================================================[.rst:
-version
--------
-
-Generate, parse and modify versions purely with CMake. Supports Semantic Versioning 2.0.0, 1.0.0 and other version formats.
-
-Synopsis
-^^^^^^^^
-
-.. parsed-literal::
-
-  version(`PARSE`_ <out-var> <string>)
-  version(`GENERATE`_ <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
-  version(`MODIFY`_ <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
-  version(`COMPARE`_ <out-var> <a> <b>)
-
-
-The following version constructs are currently supported:
-
-.. code-block::
-
-  <major> "." <minor> ["." <patch> ["." <tweak>]]
-  <major> "." <minor> ["." <patch> ["." <tweak>]] [["-"] <pre-release>] ["+" <build>]
-
-
-Parsing
-^^^^^^^
-
-.. _PARSE:
-
-.. code-block:: cmake
-
-  version(PARSE <out-var> <string>)
-
-Attempts to parse the version in ``<string>`` and stores the individual compoents into ``<out-var>_<component>``. If a component is not present in the given version, it will be undefined. If an error occurred, ``<out-var>_ERROR`` will be defined and contain the error message.
-
-Generating
-^^^^^^^^^^
-
-.. _GENERATE:
-
-.. code-block:: cmake
-
-  version(GENERATE <out-var> [COMPRESS] [MAJOR <major>] [MINOR <minor>] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
-
-Generates a version from the components provided and stores the result in ``<out-var>``. The components ``<major>`` and ``<minor>`` will default to ``0`` if not provided. If an error occurred, ``<out-var>_ERROR`` will be defined and contain the error message.
-
-Modifying
-^^^^^^^^^
-
-.. _MODIFY:
-
-.. code-block:: cmake
-
-  version(MODIFY <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>])
-
-Modifies the version provided in ``<string>`` with the components provided. The components ``<major>``, ``<minor>``, ``<patch>`` and ``<tweak>`` may have a prefix of ``+`` or ``-`` to add and subtract the value, or no prefix to replace. The result of this operation will be stored as a string in ``<out-var>``. If a component did not exist in the original, it will be added to the version as a replace operation. If an error occurred, ``<out-var>_ERROR`` will be defined and contain the error message.
-
-Comparing
-^^^^^^^^^
-
-.. _COMPARE:
-
-.. code-block:: cmake
-  
-  version(COMPARE <out-var> <a> <b>)
-
-Compares the version ``<a>`` against ``<b>`` and stores the result in ``<out-var>``. The provided version will be evaluated in the order MAJOR, MINOR, PATCH, TWEAK, PRERELEASE, and then BUILD. The following results should be expected:
-
-- If a component is only in ``<a>``, ``<out-var>`` will contain the componenent name prefixed by ``+``.
-- If a component is only in ``<b>``, ``<out-var>`` will contain the componenent name prefixed by ``-``.
-- If a component is numerical and the value is larger in ``<a>``, ``<out-var>`` will contain the componenent name prefixed by ``>``.
-- If a component is numerical and the value is larger in ``<b>``, ``<out-var>`` will contain the componenent name prefixed by ``<``.
-- If a component is alphanumerical and the value is different in either, ``<out-var>`` will contain the component name with no prefix.
-- In all other cases, ``<out-var>`` will be empty.
-- If an error occurred, ``<out-var>_ERROR`` will be defined and contain the error message, and ``<out-var>`` will be undefined. 
-#]=======================================================================]
-
 function(version)
-	# CMake functions do not have their own proper scope, they act more 
+	# CMake functions do not have their own proper scope, they act more
 
 	set(OUT_VAR "${ARGV1}")
 
@@ -171,12 +93,13 @@ function(version)
 		set(_32070faa_PRERELEASE "")
 		set(_32070faa_BUILD "")
 		set(_32070faa_ERROR "")
+		set(_32070faa_REQUIRE "")
 		cmake_parse_arguments(
 			PARSE_ARGV 2
 			_32070faa
 			"COMPRESS"
 			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
-			""
+			"REQUIRE"
 		)
 
 		# Do we have the major component, and is it valid?
@@ -210,22 +133,26 @@ function(version)
 		# Do we have the patch component, and is it valid?
 		if(NOT "${_32070faa_PATCH}" STREQUAL "")
 			string(STRIP "${_32070faa_PATCH}" _32070faa_PATCH)
-			if("${_32070faa_PATCH}" STREQUAL "")
-				set(_32070faa_PATCH "")
-			elseif(_32070faa_PATCH MATCHES [[^[0-9]+$]])
+			if(("${_32070faa_PATCH}" STREQUAL "") AND ("PATCH" IN_LIST _32070faa_REQUIRE))
+				set(_32070faa_PATCH "0")
+			endif()
+			if(_32070faa_PATCH MATCHES [[^[0-9]+$]])
 				set(_feeb1eff "${_feeb1eff}.${_32070faa_PATCH}")
 			else()
 				set(${OUT_VAR}_ERROR "PATCH component must be a numeric identifier, but is: '${_32070faa_PATCH}'" PARENT_SCOPE)
 				return()
 			endif()
+		elseif("PATCH" IN_LIST _32070faa_REQUIRE)
+			set(_feeb1eff "${_feeb1eff}.0")
 		endif()
 
 		# Do we have the tweak component, and is it valid?
 		if(NOT "${_32070faa_TWEAK}" STREQUAL "")
 			string(STRIP "${_32070faa_TWEAK}" _32070faa_TWEAK)
-			if("${_32070faa_TWEAK}" STREQUAL "")
-				set(_32070faa_TWEAK "")
-			elseif(_32070faa_TWEAK MATCHES [[^[0-9]+$]])
+			if(("${_32070faa_TWEAK}" STREQUAL "") AND ("TWEAK" IN_LIST _32070faa_REQUIRE))
+				set(_32070faa_TWEAK "0")
+			endif()
+			if(_32070faa_TWEAK MATCHES [[^[0-9]+$]])
 				if("${_32070faa_PATCH}" STREQUAL "")
 					# Patch did not exist, so it is zero.
 					set(_feeb1eff "${_feeb1eff}.0")
@@ -297,7 +224,7 @@ function(version)
 					else()
 						math(EXPR ${ARGV0} "${${ARGV0}} ${CMAKE_MATCH_1} ${CMAKE_MATCH_2}")
 					endif()
-				else()					
+				else()
 					set(${ARGV0} "${${ARGV1}}")
 				endif()
 			endif()
@@ -354,6 +281,9 @@ function(version)
 		endif()
 		if(_fe7bcddd_COMPRESS)
 			set(_fe7bcddd_GEN "${_fe7bcddd_GEN} COMPRESS")
+		endif()
+		if(_fe7bcddd_REQUIRE)
+			set(_fe7bcddd_GEN "${_fe7bcddd_GEN} REQUIRE \"${_df8abcce_REQUIRE}\"")
 		endif()
 		cmake_language(EVAL CODE "version(GENERATE _df8abcce ${_fe7bcddd_GEN})")
 		if(_df8abcce_ERROR)
@@ -457,7 +387,7 @@ function(version)
 			endif()
 		elseif(NOT (_00fdeadb_PRERELEASE STREQUAL _ca75feel_PRERELEASE))
 			set(${OUT_VAR} "PRERELEASE" PARENT_SCOPE)
-			return()		
+			return()
 		endif()
 
 		# Build
@@ -471,7 +401,7 @@ function(version)
 			endif()
 		elseif(NOT (_00fdeadb_BUILD STREQUAL _ca75feel_BUILD))
 			set(${OUT_VAR} "BUILD" PARENT_SCOPE)
-			return()		
+			return()
 		endif()
 
 		# Both are exactly the same.
