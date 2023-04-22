@@ -10,7 +10,7 @@
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-function(version)
+function(version MODE OUT_VAR)
 	# CMake functions do not have their own proper scope, they act more
 
 	set(OUT_VAR "${ARGV1}")
@@ -24,8 +24,8 @@ function(version)
 			PARSE_ARGV 2
 			_992ae727
 			""
-			""
 			"REQUIRE"
+			""
 		)
 		# <major> "." <minor> ["." <patch> ["." <tweak>]]
 		# <major> "." <minor> ["." <patch> ["." <tweak>]] [["-"] <pre-release>] ["+" <build>]
@@ -98,65 +98,56 @@ function(version)
 			PARSE_ARGV 2
 			_32070faa
 			"COMPRESS"
-			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
-			"REQUIRE"
+			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD;REQUIRE"
+			""
 		)
+		
+		string(STRIP "${_32070faa_MAJOR}" _32070faa_MAJOR)
+		string(STRIP "${_32070faa_MINOR}" _32070faa_MINOR)
+		string(STRIP "${_32070faa_PATCH}" _32070faa_PATCH)
+		string(STRIP "${_32070faa_TWEAK}" _32070faa_TWEAK)
+		string(STRIP "${_32070faa_PRERELEASE}" _32070faa_PRERELEASE)
+		string(STRIP "${_32070faa_BUILD}" _32070faa_BUILD)
 
 		# Do we have the major component, and is it valid?
-		if(NOT "${_32070faa_MAJOR}" STREQUAL "")
-			string(STRIP "${_32070faa_MAJOR}" _32070faa_MAJOR)
-			if("${_32070faa_MAJOR}" STREQUAL "")
-				set(_32070faa_MAJOR 0)
-			elseif(NOT (_32070faa_MAJOR MATCHES [[^[0-9]+$]]))
-				set(${OUT_VAR}_ERROR "MAJOR component must be a numeric identifier, but is: '${_32070faa_MAJOR}'" PARENT_SCOPE)
-				return()
-			endif()
-		else()
+		if(_32070faa_MAJOR STREQUAL "")
 			set(_32070faa_MAJOR 0)
+		endif()
+		if(NOT (_32070faa_MAJOR MATCHES [[^[0-9]+$]]))
+			set(${OUT_VAR}_ERROR "MAJOR component must be a numeric identifier, but is: '${_32070faa_MAJOR}'" PARENT_SCOPE)
+			return()
 		endif()
 		set(_feeb1eff "${_feeb1eff}${_32070faa_MAJOR}")
 
 		# Do we have the minor component, and is it valid?
-		if(NOT "${_32070faa_MINOR}" STREQUAL "")
-			string(STRIP "${_32070faa_MINOR}" _32070faa_MINOR)
-			if("${_32070faa_MINOR}" STREQUAL "")
-				set(_32070faa_MINOR 0)
-			elseif(NOT (_32070faa_MINOR MATCHES [[^[0-9]+$]]))
-				set(${OUT_VAR}_ERROR "MINOR component must be a numeric identifier, but is: '${_32070faa_MINOR}'" PARENT_SCOPE)
-				return()
-			endif()
-		else()
+		if(_32070faa_MINOR STREQUAL "")
 			set(_32070faa_MINOR 0)
+		endif()
+		if(NOT (_32070faa_MINOR MATCHES [[^[0-9]+$]]))
+			set(${OUT_VAR}_ERROR "MINOR component must be a numeric identifier, but is: '${_32070faa_MINOR}'" PARENT_SCOPE)
+			return()
 		endif()
 		set(_feeb1eff "${_feeb1eff}.${_32070faa_MINOR}")
 
 		# Do we have the patch component, and is it valid?
-		if(NOT "${_32070faa_PATCH}" STREQUAL "")
-			string(STRIP "${_32070faa_PATCH}" _32070faa_PATCH)
-			if(("${_32070faa_PATCH}" STREQUAL "") AND ("PATCH" IN_LIST _32070faa_REQUIRE))
-				set(_32070faa_PATCH "0")
-			endif()
+		if((("PATCH" IN_LIST _32070faa_REQUIRE) OR ("TWEAK" IN_LIST _32070faa_REQUIRE) OR (NOT _32070faa_TWEAK STREQUAL "")) AND ("${_32070faa_PATCH}" STREQUAL ""))
+			set(_32070faa_PATCH "0")
+		endif()
+		if(NOT _32070faa_PATCH STREQUAL "")
 			if(_32070faa_PATCH MATCHES [[^[0-9]+$]])
 				set(_feeb1eff "${_feeb1eff}.${_32070faa_PATCH}")
 			else()
 				set(${OUT_VAR}_ERROR "PATCH component must be a numeric identifier, but is: '${_32070faa_PATCH}'" PARENT_SCOPE)
 				return()
 			endif()
-		elseif("PATCH" IN_LIST _32070faa_REQUIRE)
-			set(_feeb1eff "${_feeb1eff}.0")
 		endif()
 
 		# Do we have the tweak component, and is it valid?
-		if(NOT "${_32070faa_TWEAK}" STREQUAL "")
-			string(STRIP "${_32070faa_TWEAK}" _32070faa_TWEAK)
-			if(("${_32070faa_TWEAK}" STREQUAL "") AND ("TWEAK" IN_LIST _32070faa_REQUIRE))
-				set(_32070faa_TWEAK "0")
-			endif()
+		if(("TWEAK" IN_LIST _32070faa_REQUIRE) AND (_32070faa_TWEAK STREQUAL ""))
+			set(_32070faa_TWEAK "0")
+		endif()
+		if(NOT _32070faa_TWEAK STREQUAL "")
 			if(_32070faa_TWEAK MATCHES [[^[0-9]+$]])
-				if("${_32070faa_PATCH}" STREQUAL "")
-					# Patch did not exist, so it is zero.
-					set(_feeb1eff "${_feeb1eff}.0")
-				endif()
 				set(_feeb1eff "${_feeb1eff}.${_32070faa_TWEAK}")
 			else()
 				set(${OUT_VAR}_ERROR "TWEAK component must be a numeric identifier, but is: '${_32070faa_TWEAK}'" PARENT_SCOPE)
@@ -166,7 +157,6 @@ function(version)
 
 		# Do we have the pre-release component, and is it valid?
 		if(NOT "${_32070faa_PRERELEASE}" STREQUAL "")
-			string(STRIP "${_32070faa_PRERELEASE}" _32070faa_PRERELEASE)
 			list(JOIN _32070faa_PRERELEASE "." _32070faa_PRERELEASE)
 			if("${_32070faa_PRERELEASE}" STREQUAL "")
 				set(_32070faa_PRERELEASE "")
@@ -184,7 +174,6 @@ function(version)
 
 		# Do we have the build component, and is it valid?
 		if(NOT "${_32070faa_BUILD}" STREQUAL "")
-			string(STRIP "${_32070faa_BUILD}" _32070faa_BUILD)
 			list(JOIN _32070faa_BUILD "." _32070faa_BUILD)
 			if("${_32070faa_BUILD}" STREQUAL "")
 				unset(_32070faa_BUILD)
@@ -211,8 +200,8 @@ function(version)
 			PARSE_ARGV 3
 			_fe7bcddd
 			"COMPRESS"
-			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
-			"REQUIRE"
+			"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD;REQUIRE"
+			""
 		)
 
 		# Helpers
@@ -282,8 +271,8 @@ function(version)
 		if(_fe7bcddd_COMPRESS)
 			set(_fe7bcddd_GEN "${_fe7bcddd_GEN} COMPRESS")
 		endif()
-		if(_fe7bcddd_REQUIRE)
-			set(_fe7bcddd_GEN "${_fe7bcddd_GEN} REQUIRE \"${_df8abcce_REQUIRE}\"")
+		if(NOT _fe7bcddd_REQUIRE STREQUAL "")
+			set(_fe7bcddd_GEN "${_fe7bcddd_GEN} REQUIRE \"${_fe7bcddd_REQUIRE}\"")
 		endif()
 		cmake_language(EVAL CODE "version(GENERATE _df8abcce ${_fe7bcddd_GEN})")
 		if(_df8abcce_ERROR)
