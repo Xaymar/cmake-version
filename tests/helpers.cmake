@@ -1,38 +1,13 @@
 include("../version.cmake")
 
-function(test_generate)
+function(compare_test)
 	cmake_parse_arguments(
 		PARSE_ARGV 1
 		_6edc8bbd
-		"COMPRESS;FAIL"
-		"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
+		"FAIL"
+		""
 		""
 	)
-
-	set(ARGS "")
-	if(_6edc8bbd_MAJOR)
-		set(ARGS "${ARGS} MAJOR \"${_6edc8bbd_MAJOR}\"")
-	endif()
-	if(_6edc8bbd_MINOR)
-		set(ARGS "${ARGS} MINOR \"${_6edc8bbd_MINOR}\"")
-	endif()
-	if(_6edc8bbd_PATCH)
-		set(ARGS "${ARGS} PATCH \"${_6edc8bbd_PATCH}\"")
-	endif()
-	if(_6edc8bbd_TWEAK)
-		set(ARGS "${ARGS} TWEAK \"${_6edc8bbd_TWEAK}\"")
-	endif()
-	if(_6edc8bbd_PRERELEASE)
-		set(ARGS "${ARGS} PRERELEASE \"${_6edc8bbd_PRERELEASE}\"")
-	endif()
-	if(_6edc8bbd_BUILD)
-		set(ARGS "${ARGS} BUILD \"${_6edc8bbd_BUILD}\"")
-	endif()
-	if(_6edc8bbd_COMPRESS)
-		set(ARGS "${ARGS} COMPRESS")
-	endif()
-	cmake_language(EVAL CODE "version(GENERATE _TEST ${ARGS})")
-
 	if(_TEST_ERROR)
 		if(_6edc8bbd_FAIL)
 			message(STATUS "PASSED: '${ARGV0}'.\n\t${_TEST_ERROR}")
@@ -135,64 +110,6 @@ function(test_parse)
 			message(SEND_ERROR "FAILED: '${ARGV0}'.")
 		else()
 			message(STATUS "PASSED: '${ARGV0}'.")
-		endif()
-	endif()
-endfunction()
-
-function(test_modify)
-	cmake_parse_arguments(
-		PARSE_ARGV 2
-		_6edc8bbd
-		"FAIL;COMPRESS"
-		"MAJOR;MINOR;PATCH;TWEAK;PRERELEASE;BUILD"
-		""
-	)
-
-	set(ARGS "")
-	if(_6edc8bbd_MAJOR)
-		set(ARGS "${ARGS} MAJOR \"${_6edc8bbd_MAJOR}\"")
-	endif()
-	if(_6edc8bbd_MINOR)
-		set(ARGS "${ARGS} MINOR \"${_6edc8bbd_MINOR}\"")
-	endif()
-	if(_6edc8bbd_PATCH)
-		set(ARGS "${ARGS} PATCH \"${_6edc8bbd_PATCH}\"")
-	endif()
-	if(_6edc8bbd_TWEAK)
-		set(ARGS "${ARGS} TWEAK \"${_6edc8bbd_TWEAK}\"")
-	endif()
-	if(_6edc8bbd_PRERELEASE)
-		set(ARGS "${ARGS} PRERELEASE \"${_6edc8bbd_PRERELEASE}\"")
-	endif()
-	if(_6edc8bbd_BUILD)
-		set(ARGS "${ARGS} BUILD \"${_6edc8bbd_BUILD}\"")
-	endif()
-	if(_6edc8bbd_COMPRESS)
-		set(ARGS "${ARGS} COMPRESS")
-	endif()
-	cmake_language(EVAL CODE "version(MODIFY _TEST \"${ARGV1}\" ${ARGS})")
-
-	set(FAILED OFF)
-	if(_TEST_ERROR)
-		set(MESSAGE "${_TEST_ERROR}")
-		set(FAILED ON)
-	else()
-		if(NOT (_TEST STREQUAL ARGV0))
-			set(FAILED ON)
-		endif()
-	endif()
-
-	if(FAILED)
-		if(_6edc8bbd_FAIL)
-			message(STATUS "PASSED: '${ARGV0}' != '${_TEST}'.\n\t${MESSAGE}")
-		else()
-			message(SEND_ERROR "FAILED: '${ARGV0}' != '${_TEST}'.\n\t${MESSAGE}")
-		endif()
-	else()
-		if(_6edc8bbd_FAIL)
-			message(SEND_ERROR "FAILED: '${ARGV0}' == '${_TEST}'.\n\t${MESSAGE}")
-		else()
-			message(STATUS "PASSED: '${ARGV0}' == '${_TEST}'.")
 		endif()
 	endif()
 endfunction()
