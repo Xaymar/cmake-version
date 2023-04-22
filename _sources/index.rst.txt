@@ -31,6 +31,8 @@ Parsing
 
 Attempts to parse the version in ``<string>`` and stores the individual compoents into ``<out-var>_<component>``. If a component is not present in the given version, it will be set to a false constant. If an error occurred, ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be turned into a list if they are encountered. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
 
+It is necessary to include a ``;`` for the ``REQUIRE`` parameter, even if there is only one required part. 
+
 Generating
 ^^^^^^^^^^
 
@@ -42,6 +44,8 @@ Generating
 
 Generates a version from the components provided and stores the result in ``<out-var>``. The components ``<major>`` and ``<minor>`` will default to ``0`` if not provided. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The ``PRERELEASE`` and ``BUILD`` components support the dot-separation specifier and will be converted from a list if encountered. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
 
+It is necessary to include a ``;`` for the ``REQUIRE`` parameter, even if there is only one required part. 
+
 Modifying
 ^^^^^^^^^
 
@@ -52,6 +56,8 @@ Modifying
   version(MODIFY <out-var> <string> [COMPRESS] [MAJOR <major>] [MINOR <minor] [PATCH <patch>] [TWEAK <tweak>] [PRERELEASE <prerelease>] [BUILD <build>] [REQUIRE [PATCH|TWEAK][;...]])
 
 Modifies the version provided in ``<string>`` with the components provided. The components ``<major>``, ``<minor>``, ``<patch>`` and ``<tweak>`` may have a prefix of ``+`` or ``-`` to add and subtract the value, or no prefix to replace. The result of this operation will be stored as a string in ``<out-var>``. If a component did not exist in the original, it will be added to the version as a replace operation. If an error occurred,  ``<out-var>_ERROR`` will contain the error message otherwise it will be a false constant. The optional ``REQUIRE`` allows forcing the components ``PATCH`` and ``TWEAK`` to always be defined.
+
+It is necessary to include a ``;`` for the ``REQUIRE`` parameter, even if there is only one required part. 
 
 Comparing
 ^^^^^^^^^

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>version &mdash; version 1.4.0 documentation</title>
+  <title>version &mdash; version 1.4.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,10 +12,8 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -26,14 +24,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> version
+
+          
+          
+          <a href="#" class="icon icon-home">
+            version
           </a>
               <div class="version">
-                1.4.0
+                1.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,8 +66,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>version</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">version</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,6 +97,7 @@ version(<a class="reference internal" href="#compare">COMPARE</a> &lt;out-var&gt
 </pre></div>
 </div>
 <p>Attempts to parse the version in <code class="docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code> and stores the individual compoents into <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;_&lt;component&gt;</span></code>. If a component is not present in the given version, it will be set to a false constant. If an error occurred, <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;_ERROR</span></code> will contain the error message otherwise it will be a false constant. The <code class="docutils literal notranslate"><span class="pre">PRERELEASE</span></code> and <code class="docutils literal notranslate"><span class="pre">BUILD</span></code> components support the dot-separation specifier and will be turned into a list if they are encountered. The optional <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> allows forcing the components <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> and <code class="docutils literal notranslate"><span class="pre">TWEAK</span></code> to always be defined.</p>
+<p>It is necessary to include a <code class="docutils literal notranslate"><span class="pre">;</span></code> for the <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> parameter, even if there is only one required part.</p>
 </section>
 <section id="generating">
 <h2>Generating<a class="headerlink" href="#generating" title="Permalink to this heading"></a></h2>
@@ -102,6 +105,7 @@ version(<a class="reference internal" href="#compare">COMPARE</a> &lt;out-var&gt
 </pre></div>
 </div>
 <p>Generates a version from the components provided and stores the result in <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;</span></code>. The components <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;minor&gt;</span></code> will default to <code class="docutils literal notranslate"><span class="pre">0</span></code> if not provided. If an error occurred,  <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;_ERROR</span></code> will contain the error message otherwise it will be a false constant. The <code class="docutils literal notranslate"><span class="pre">PRERELEASE</span></code> and <code class="docutils literal notranslate"><span class="pre">BUILD</span></code> components support the dot-separation specifier and will be converted from a list if encountered. The optional <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> allows forcing the components <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> and <code class="docutils literal notranslate"><span class="pre">TWEAK</span></code> to always be defined.</p>
+<p>It is necessary to include a <code class="docutils literal notranslate"><span class="pre">;</span></code> for the <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> parameter, even if there is only one required part.</p>
 </section>
 <section id="modifying">
 <h2>Modifying<a class="headerlink" href="#modifying" title="Permalink to this heading"></a></h2>
@@ -109,6 +113,7 @@ version(<a class="reference internal" href="#compare">COMPARE</a> &lt;out-var&gt
 </pre></div>
 </div>
 <p>Modifies the version provided in <code class="docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code> with the components provided. The components <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;minor&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;patch&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;tweak&gt;</span></code> may have a prefix of <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> to add and subtract the value, or no prefix to replace. The result of this operation will be stored as a string in <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;</span></code>. If a component did not exist in the original, it will be added to the version as a replace operation. If an error occurred,  <code class="docutils literal notranslate"><span class="pre">&lt;out-var&gt;_ERROR</span></code> will contain the error message otherwise it will be a false constant. The optional <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> allows forcing the components <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> and <code class="docutils literal notranslate"><span class="pre">TWEAK</span></code> to always be defined.</p>
+<p>It is necessary to include a <code class="docutils literal notranslate"><span class="pre">;</span></code> for the <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> parameter, even if there is only one required part.</p>
 </section>
 <section id="comparing">
 <h2>Comparing<a class="headerlink" href="#comparing" title="Permalink to this heading"></a></h2>
